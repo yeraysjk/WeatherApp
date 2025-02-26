@@ -1,33 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="@color/light_blue">
 
-    <!-- Campo para ingresar la ciudad -->
-    <EditText
-        android:id="@+id/editTextCity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Ingrese ciudad"
-        android:inputType="text" />
-
-    <!-- Botón para iniciar la búsqueda -->
-    <Button
-        android:id="@+id/buttonSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Buscar"
-        android:layout_marginTop="8dp" />
-
-    <!-- TextView para mostrar el resultado del clima -->
     <TextView
-        android:id="@+id/textViewWeather"
+        android:id="@+id/textViewCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clima"
-        android:textSize="20sp"
-        android:layout_marginTop="16dp" />
+        android:text="Madrid"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"/>
+
+    <ImageView
+        android:id="@+id/imageViewWeather"
+        android:layout_width="191dp"
+        android:layout_height="186dp"
+        android:src="@drawable/sol" />
+
+    <TextView
+        android:id="@+id/textViewTemperature"
+        android:layout_width="87dp"
+        android:layout_height="65dp"
+        android:text="13°"
+        android:textSize="48sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
 </LinearLayout>

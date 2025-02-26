@@ -1,114 +1,109 @@
 package yeray.priede.weatherapp;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
+import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class WeatherFragment extends Fragment {
+    private static final String ARG_CITY = "city";
+    private String cityName;
 
-    private EditText editTextCity;
-    private Button buttonSearch;
-    private TextView textViewWeather;
+    private TextView textViewCity, textViewTemperature, textViewDescription;
+    private ImageView imageViewWeather;
 
-    // Reemplaza con tu API key válida de OpenWeatherMap
-    private final String API_KEY = "5b53e2223479fb3892bc0c13c7f30131";
+    public WeatherFragment() { }
 
-    public WeatherFragment() {
-        // Constructor público requerido
+    public static WeatherFragment newInstance(String city) {
+        WeatherFragment fragment = new WeatherFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_CITY, city);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_weather, container, false);
-        editTextCity = view.findViewById(R.id.editTextCity);
-        buttonSearch = view.findViewById(R.id.buttonSearch);
-        textViewWeather = view.findViewById(R.id.textViewWeather);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            cityName = getArguments().getString(ARG_CITY);
+        }
+    }
 
-        buttonSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String city = editTextCity.getText().toString().trim();
-                if (!city.isEmpty()) {
-                    new FetchWeatherTask().execute(city);
-                } else {
-                    textViewWeather.setText("Ingresa una ciudad");
-                }
-            }
-        });
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_weather, container, false);
+
+        textViewCity = view.findViewById(R.id.textViewCity);
+        textViewTemperature = view.findViewById(R.id.textViewTemperature);
+        textViewDescription = view.findViewById(R.id.textViewDescription);
+        imageViewWeather = view.findViewById(R.id.imageViewWeather);
+
+        textViewCity.setText(cityName);
+        fetchWeatherData();
+
         return view;
     }
 
-    // Tarea asíncrona para obtener datos del clima según la ciudad ingresada
-    private class FetchWeatherTask extends AsyncTask<String, Void, String> {
+    private void fetchWeatherData() {
+        String apiKey = "5b53e2223479fb3892bc0c13c7f30131";
+        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apiKey + "&units=metric";
 
-        @Override
-        protected String doInBackground(String... params) {
-            String city = params[0];
-            String result = "";
+        new Thread(() -> {
             try {
-                // Se agrega &lang=es para obtener la respuesta en español
-                String urlString = "https://api.openweathermap.org/data/2.5/weather?q="
-                        + city + "&appid=" + API_KEY + "&units=metric&lang=es";
-
-                URL url = new URL(urlString);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                URL weatherUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) weatherUrl.openConnection();
                 connection.setRequestMethod("GET");
-                connection.connect();
 
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()));
-                    StringBuilder stringBuilder = new StringBuilder();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder response = new StringBuilder();
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        stringBuilder.append(line);
+                        response.append(line);
                     }
                     reader.close();
-                    result = stringBuilder.toString();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (s.isEmpty()) {
-                textViewWeather.setText("Error al obtener datos del clima.");
-                return;
-            }
-            try {
-                JSONObject jsonObject = new JSONObject(s);
-                if (jsonObject.has("main")) {
-                    JSONObject main = jsonObject.getJSONObject("main");
-                    double temperature = main.getDouble("temp");
-                    textViewWeather.setText("Temperatura: " + temperature + "°C");
-                } else if(jsonObject.has("message")) {
-                    // Si la respuesta contiene un mensaje de error (por ejemplo, ciudad no encontrada)
-                    String message = jsonObject.getString("message");
-                    textViewWeather.setText("Error: " + message);
-                } else {
-                    textViewWeather.setText("Ciudad no encontrada o error en la respuesta.");
+                    getActivity().runOnUiThread(() -> updateUI(response.toString()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                textViewWeather.setText("Error al procesar datos del clima.");
+                getActivity().runOnUiThread(() -> textViewTemperature.setText("Error"));
             }
+        }).start();
+    }
+
+    private void updateUI(String json) {
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            JSONObject main = jsonObject.getJSONObject("main");
+            JSONObject weather = jsonObject.getJSONArray("weather").getJSONObject(0);
+
+            double temperature = main.getDouble("temp");
+            String description = weather.getString("description");
+
+            textViewTemperature.setText(temperature + "°C");
+            textViewDescription.setText(description);
+
+            // Cambiar icono según el clima
+            String icon = weather.getString("icon");
+            int iconResId = getResources().getIdentifier("icon_" + icon, "drawable", getActivity().getPackageName());
+            imageViewWeather.setImageResource(iconResId);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
