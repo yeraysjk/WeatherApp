@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
 
 public class MainActivity extends AppCompatActivity {
     private EditText editTextCity;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         buttonSearch.setOnClickListener(v -> {
             String city = editTextCity.getText().toString().trim();
             if (!city.isEmpty()) {
+                // Primero ocultamos el teclado
+                hideKeyboard();
+                // Luego mostramos el fragmento con la ciudad
                 showWeatherFragment(city);
             } else {
                 Toast.makeText(MainActivity.this, "Ingrese una ciudad", Toast.LENGTH_SHORT).show();
@@ -42,5 +47,14 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
         fragmentContainer.setVisibility(View.VISIBLE);
+    }
+
+    private void hideKeyboard() {
+        // Obtener el InputMethodManager
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null && getCurrentFocus() != null) {
+            // Ocultar el teclado
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }

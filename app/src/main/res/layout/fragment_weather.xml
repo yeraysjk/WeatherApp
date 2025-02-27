@@ -8,19 +8,37 @@
     android:background="@color/light_blue">
 
     <TextView
+        android:id="@+id/textViewDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
+        android:text="Data i hora"
+        android:gravity="center"/>
+
+    <TextView
         android:id="@+id/textViewCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Madrid"
-        android:textSize="24sp"
         android:textColor="@android:color/black"
-        android:textStyle="bold"/>
+        android:textSize="34sp"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/imageViewWeather"
         android:layout_width="191dp"
-        android:layout_height="186dp"
+        android:layout_height="149dp"
         android:src="@drawable/sol" />
+
+    <TextView
+        android:id="@+id/textViewDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textViewTemperature"
@@ -31,11 +49,46 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textViewDescription"
+        android:id="@+id/textViewHumidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear"
-        android:textColor="@android:color/black"
-        android:textSize="20sp" />
+        android:text="Humedad: --%"
+        android:textColor="#9C27B0"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewPressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Presión: -- hPa"
+        android:textColor="#9C27B0"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewWind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Viento: -- m/s"
+        android:textColor="#9C27B0"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewSunrise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Salida del sol: --:--"
+        android:textColor="#9C27B0"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewSunset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Puesta del sol: --:--"
+        android:textColor="#9C27B0"
+        android:textSize="16sp" />
+
+
+
 
 </LinearLayout>
