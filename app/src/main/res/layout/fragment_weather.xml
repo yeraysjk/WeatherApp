@@ -1,94 +1,144 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp"
-    android:background="@color/light_blue">
+    android:background="@drawable/fondo"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewDateTime"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"
-        android:text="Data i hora"
-        android:gravity="center"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Madrid"
-        android:textColor="@android:color/black"
-        android:textSize="34sp"
-        android:textStyle="bold" />
+        <!-- Tarjeta de búsqueda -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp">
 
-    <ImageView
-        android:id="@+id/imageViewWeather"
-        android:layout_width="191dp"
-        android:layout_height="149dp"
-        android:src="@drawable/sol" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp">
 
-    <TextView
-        android:id="@+id/textViewDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear"
-        android:textColor="@android:color/black"
-        android:textSize="20sp" />
+                <EditText
+                    android:id="@+id/editTextCitySearch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:background="@drawable/edittext_background"
+                    android:hint="Ingrese una ciudad"
+                    android:padding="8dp" />
 
-    <TextView
-        android:id="@+id/textViewTemperature"
-        android:layout_width="87dp"
-        android:layout_height="65dp"
-        android:text="13°"
-        android:textSize="48sp"
-        android:textStyle="bold" />
+                <Button
+                    android:id="@+id/buttonCitySearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Buscar"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/textViewHumidity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Humedad: --%"
-        android:textColor="#9C27B0"
-        android:textSize="16sp" />
+        <!-- Tarjeta de información del clima -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp">
 
-    <TextView
-        android:id="@+id/textViewPressure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Presión: -- hPa"
-        android:textColor="#9C27B0"
-        android:textSize="16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#7EB8C1"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewWind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Viento: -- m/s"
-        android:textColor="#9C27B0"
-        android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/textViewCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ciudad"
+                    android:textColor="#000000"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textViewSunrise"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Salida del sol: --:--"
-        android:textColor="#9C27B0"
-        android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/textViewDateTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Fecha y Hora"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/textViewSunset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Puesta del sol: --:--"
-        android:textColor="#9C27B0"
-        android:textSize="16sp" />
+                <ImageView
+                    android:id="@+id/imageViewWeather"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:scaleType="centerInside" />
 
+                <TextView
+                    android:id="@+id/textViewTemperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Temperatura"
+                    android:textSize="48sp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/textViewDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Descripción"
+                    android:textSize="20sp" />
 
+                <TextView
+                    android:id="@+id/textViewHumidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Humedad" />
 
-</LinearLayout>
+                <TextView
+                    android:id="@+id/textViewPressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Presión" />
+
+                <TextView
+                    android:id="@+id/textViewWind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Viento" />
+
+                <TextView
+                    android:id="@+id/textViewSunrise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Salida del sol" />
+
+                <TextView
+                    android:id="@+id/textViewSunset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Puesta del sol" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

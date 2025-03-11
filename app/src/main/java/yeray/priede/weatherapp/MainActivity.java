@@ -1,19 +1,16 @@
 package yeray.priede.weatherapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentContainerView;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText editTextCity;
-    private Button buttonSearch;
+
     private FragmentContainerView fragmentContainer;
 
     @Override
@@ -21,40 +18,49 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editTextCity = findViewById(R.id.editTextCity);
-        buttonSearch = findViewById(R.id.buttonSearch);
+        // Configuramos la Toolbar y la establecemos como ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         fragmentContainer = findViewById(R.id.fragmentContainer);
 
-        buttonSearch.setOnClickListener(v -> {
-            String city = editTextCity.getText().toString().trim();
-            if (!city.isEmpty()) {
-                // Primero ocultamos el teclado
-                hideKeyboard();
-                // Luego mostramos el fragmento con la ciudad
-                showWeatherFragment(city);
-            } else {
-                Toast.makeText(MainActivity.this, "Ingrese una ciudad", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void showWeatherFragment(String city) {
-        WeatherFragment weatherFragment = WeatherFragment.newInstance(city);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainer, weatherFragment)
-                .commit();
-
-        fragmentContainer.setVisibility(View.VISIBLE);
-    }
-
-    private void hideKeyboard() {
-        // Obtener el InputMethodManager
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null && getCurrentFocus() != null) {
-            // Ocultar el teclado
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        // Carga el fragmento de clima por defecto si es la primera vez
+        if (savedInstanceState == null) {
+            showMusicFragment();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Infla el menú desde res/menu/menu_main.xml
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.item_weather) {
+            showWeatherFragment();
+            return true;
+        } else if (id == R.id.item_music) {
+            showMusicFragment();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showWeatherFragment() {
+        WeatherFragment weatherFragment = WeatherFragment.newInstance("Barcelona");
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, weatherFragment);
+        transaction.commit();
+    }
+
+    private void showMusicFragment() {
+        MusicFragment musicFragment = MusicFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, musicFragment);
+        transaction.commit();
     }
 }
